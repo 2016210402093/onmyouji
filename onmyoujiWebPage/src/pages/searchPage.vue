@@ -12,7 +12,6 @@
 import onmyoujiHead from '../components/onmyoujiHead.vue'
 import onmyoujiPicChange from '../components/onmyoujiPicChange'
 import onmyoujiSearchResult from '../components/onmyoujiSearchResult'
-import axios from 'axios'
 
 export default {
   name: 'app',
@@ -34,11 +33,11 @@ export default {
       
       switch (this.inputData.isFengMo) {
         case true:
-          axios.post('http://localhost:8090/queryFengMo', {
+          this.$api.queryFengMo.queryFengMoByKeyWords({
             keyword: this.inputData.inputFengMo
             })
           .then((res)=>{
-            if(res.data.data.length === 0){
+            if(res.data.length === 0){
               this.inputData = Object.assign({}, this.inputData, {queryResult: [{
                 id:1000,
                 question:`没有找到显关线索!点击上面的'溯~'联系我吧`,
@@ -47,7 +46,7 @@ export default {
               })
             }
             else{
-              this.inputData = Object.assign({}, this.inputData, {queryResult: res.data.data})
+              this.inputData = Object.assign({}, this.inputData, {queryResult: res.data})
             }         
           })
           .catch((err)=>{
@@ -56,11 +55,11 @@ export default {
           break;
         
         case false:
-          axios.post('http://localhost:8090/queryXuanShang', {
-            keyword: this.inputData.inputXuanShang
+          this.$api.queryXuanShang.queryXuanShangByKeyWords({
+              keyword: this.inputData.inputXuanShang
             })
           .then((res)=>{
-            if(res.data.data.length === 0){
+            if(res.data.length === 0){
               this.inputData = Object.assign({}, this.inputData, {queryResult: [{
                 id:166666,
                 clue:'╥﹏╥...',
@@ -70,7 +69,7 @@ export default {
               })
             }
             else{
-              this.inputData = Object.assign({}, this.inputData, {queryResult: res.data.data})
+              this.inputData = Object.assign({}, this.inputData, {queryResult: res.data})
             }   
           })
           .catch((err)=>{

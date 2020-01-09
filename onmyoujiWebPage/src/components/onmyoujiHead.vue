@@ -86,7 +86,7 @@ export default {
 
 .header img {
     width: 46%;
-    margin: 2%;
+    margin: calc(2% - 2px);
     border-radius: 15px;
     flex: 0 1 auto;
 }

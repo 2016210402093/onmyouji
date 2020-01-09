@@ -4,12 +4,15 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "test": "set NODE_ENV=test && vue-cli-service serve",
+    "production": "set NODE_ENV=production && vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.19.1",
     "core-js": "^3.4.3",
+    "qs": "^6.9.1",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3"
   },
