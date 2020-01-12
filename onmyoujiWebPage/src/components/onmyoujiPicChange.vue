@@ -63,7 +63,7 @@ export default {
     },
     //加载完成之后启动图片切换动画
     mounted: function(){
-        this.timer = setInterval(this.play, 5000);
+        this.timer = setInterval(this.play, 4000);
     },
     methods: {
         TEST (){

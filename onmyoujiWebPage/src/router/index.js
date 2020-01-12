@@ -28,7 +28,7 @@ export default new VueRouter({
         },
         {   //'/'重定向为'/search'
             path: '/',
-            name: 'search',
+            name: 'rederictSearch',
             redirect: '/search'
         }
     ]

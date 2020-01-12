@@ -1,27 +1,24 @@
 <template>
 <div id="searchResult">
     <table class="dataintable">
-        <tr v-show="inputData.isFengMo">
+        <tr v-show="isFengMo">
           <th class="miXinQuestion">密信问题</th>
           <th class="miXinAnswer">答案</th>
         </tr>
-        <tr v-show="inputData.isFengMo" v-for="(item, index) in inputData.queryResult" :key="index">
+        <tr v-show="isFengMo" v-for="item in queryResult" :key="item.id+900">
           <td>{{item.question}}</td>
           <td>{{item.answer}}</td>
         </tr>
 
-        <tr v-show="!inputData.isFengMo">
+        <tr v-show="!isFengMo">
           <th class="clue">线索</th>
           <th class="shikigami">对应式神</th>
           <th class="recommend">推荐副本</th>
         </tr>
-        <tr v-show="!inputData.isFengMo" v-for="item in inputData.queryResult" :key="item.id">
+        <tr v-show="!isFengMo" v-for="item in queryResult" :key="item.id+500">
           <td>{{item.clue}}</td>
           <td>{{item.god}}</td>
           <td>{{item.recommend}}</td>
-          <!-- <td>╥﹏╥...</td>
-          <td>╥﹏╥...</td>
-          <td>没有找到显关线索!点击上面的'溯~'联系我吧</td> -->
         </tr>
     </table>
 </div>
@@ -29,22 +26,72 @@
 
 <script>
 
+import {mapState} from "vuex"
+
 export default {
     name: 'searchResult',
+    
+    computed: {
+      ...mapState('search',{
+        isFengMo: state => state.isFengMo,
+        inputFengMo: state => state.inputFengMo,
+        inputXuanShang: state => state.inputXuanShang
+      })
+    },
 
     data() {
         return {
-          
+          queryResult:[]
         }
     },
 
-     props: ["inputData"], //定义父组件传递过来的输入信息
-
-     methods: {
-         test() {
-           console.log(this.inputData);
-         }
-     }
+    watch: {
+      inputFengMo(){
+        if(this.inputFengMo!==''){
+          this.$api.queryFengMo.queryFengMoByKeyWords({
+            keyword: this.inputFengMo
+            })
+          .then((res)=>{
+            if(res.data.length === 0){
+              this.queryResult = [{
+                id:1000,
+                question:`没有找到显关线索!点击上面的'溯~'联系我吧`,
+                answer: '╥﹏╥...'
+              }]
+            }
+            else{
+              this.queryResult = res.data;
+            }         
+          })
+          .catch((err)=>{
+            alert(err);
+          })
+        }
+      },
+      inputXuanShang(){
+        if(this.inputXuanShang !== ''){
+          this.$api.queryXuanShang.queryXuanShangByKeyWords({
+              keyword: this.inputXuanShang
+            })
+          .then((res)=>{
+            if(res.data.length === 0){
+              this.queryResult = [{
+                id:166666,
+                clue:'╥﹏╥...',
+                god: '╥﹏╥...',
+                recommend: `没有找到显关线索!点击上面的'溯~'联系我吧`
+                }]
+            }
+            else{
+              this.queryResult = res.data;
+            }   
+          })
+          .catch((err)=>{
+            alert(err);
+          })
+        }
+      }
+    }
 }
 
 </script>
@@ -54,6 +101,7 @@ export default {
 
 #searchResult {
     margin-top: 40px;
+    padding: 8px;
 }
 
 

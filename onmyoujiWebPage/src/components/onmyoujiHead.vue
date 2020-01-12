@@ -6,8 +6,8 @@
     </div>
 
     <div class="search">
-        <input v-model="inputFengMo" @input="updateInput" v-if="FengMo" :placeholder="placeholderFengMo" maxlength="30"/>
-        <input v-model="inputXuanShang" @input="updateInput" v-if="XuanShang" :placeholder="placeholderYaoQi" maxlength="30"/>
+        <input v-model="fengMoKeyWord" @input="updateInput" v-if="FengMo" :placeholder="placeholderFengMo" maxlength="30"/>
+        <input v-model="xuanShangKeyWord" @input="updateInput" v-if="XuanShang" :placeholder="placeholderYaoQi" maxlength="30"/>
         <button @click="resetInput()">重置</button>
     </div>
 
@@ -18,6 +18,8 @@
 
 <script>
 
+import {mapMutations} from "vuex"
+
 export default {
   data(){
       return {
@@ -27,19 +29,26 @@ export default {
           redActive: 'default',         //null表示未选中
           placeholderFengMo: '请输入逢魔密信的一个关键词',
           placeholderYaoQi: '请输入神秘线索关键词(空格隔开)',
-          inputFengMo: '',       //逢魔密信内容
-          inputXuanShang: ''     //悬赏封印内容
+          fengMoKeyWord: '',       //逢魔密信内容
+          xuanShangKeyWord: ''     //悬赏封印内容
       }
     },
     methods: {
+        ...mapMutations('search', [
+            "updateInputFengMo", 
+            "updateInputXuanShang", 
+            "updateIsQuery", 
+            "updateIsFengMo"
+            ]),
+        
         //选择逢魔密信
         choseFengMo() {
             this.FengMo = true;
             this.XuanShang = false;
             this.blueActive = 'blueActive';
             this.redActive = 'default';
-            this.inputXuanShang = '';
-            this.updateInput(); //更新信息，并通知父组件
+            this.xuanShangKeyWord = '';
+            this.updateInput(); //更新信息
         },
 
         //选择妖气封印
@@ -48,25 +57,26 @@ export default {
             this.XuanShang = true;
             this.blueActive = 'default';
             this.redActive = 'redActive';
-            this.inputFengMo = '';
-            this.updateInput(); //更新信息，并通知父组件
+            this.fengMoKeyWord = '';
+            this.updateInput(); //更新信息
         },
 
         //当输入内容发生变化时调用
         updateInput() {
-            if (this.inputFengMo!=='' || this.inputXuanShang!==''){ //当有一个不为空的时候触发
-                this.$emit('isChange', {
-                    isFengMo: this.FengMo,
-                    inputFengMo: this.inputFengMo,
-                    inputXuanShang: this.inputXuanShang
-                })   
+            if (this.fengMoKeyWord!=='' || this.xuanShangKeyWord!==''){ //当有一个不为空的时候触发
+                this.updateInputFengMo(this.fengMoKeyWord);
+                this.updateInputXuanShang(this.xuanShangKeyWord);
+                this.updateIsFengMo(this.FengMo);
+                this.updateIsQuery(true);
             }
         },
 
         //重置输入
         resetInput() {
-            this.inputFengMo = '';
-            this.inputXuanShang = '';
+            this.fengMoKeyWord = '';
+            this.xuanShangKeyWord = '';
+            this.updateInputFengMo('');
+            this.updateInputXuanShang('');
         }
     }
 }
@@ -82,6 +92,7 @@ export default {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
+    padding: 8px;
 }
 
 .header img {
@@ -110,6 +121,7 @@ export default {
 .search {
     display: flex;
     margin-top: 10px;
+    padding: 8px;
 }
 
 .search input {

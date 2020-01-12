@@ -1,0 +1,5 @@
+export const UPDATE_INPUT_FENGMO = 'updateInputFengMo'
+export const UPDATE_INPUT_XUANSHANG = 'updateInputXuanShang'
+export const UPDATE_IS_FENGMO = 'updateIsFengMo'
+export const UPDATE_IS_QUERY = 'updateIsQuery'
+export const UPDATE_IS_LOADING = 'updateIsLoading'

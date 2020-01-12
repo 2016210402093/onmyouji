@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import store from '../store'
 
 
 /* 
@@ -16,7 +17,7 @@ import qs from 'qs';
 switch(process.env.NODE_ENV) {
     //生产环境（部署到服务器上的环境）
     case "production":
-        axios.defaults.baseURL = "http://localhost:8090/";
+        axios.defaults.baseURL = "http://47.102.199.210/:8090/";
         break;
     
     //测试环境
@@ -61,15 +62,22 @@ token校验（jwt）：接收服务器返回的token，存储到vuex或本地存
 
 */
 
-// axios.interceptors.request.use(config=>{
-//     //携带上token
-//     let token = localStorage.getItem('token');
-//     token && (config.headers.Authorization = token)
-//     //config是请求配置项，在拦截器拦截的时候可以更改配置项，但如果不返回，发给服务器的配置项就是空的...
-//     return config;
-// }, error=>{
-//     return Promise.reject(error);
-// });
+axios.interceptors.request.use(config=>{
+
+/*     
+    //携带上token
+    let token = localStorage.getItem('token');
+    token && (config.headers.Authorization = token)
+    //config是请求配置项，在拦截器拦截的时候可以更改配置项，但如果不返回，发给服务器的配置项就是空的...
+    return config; 
+*/
+
+    store.commit("search/updateIsLoading", true); //显示加载中
+    return config;
+
+}, error=>{
+    return Promise.reject(error);
+});
 
 
 /* 
@@ -83,8 +91,12 @@ axios.defaults.validateStatus = status =>{
 }
 
 axios.interceptors.response.use(respose=>{
+
+    store.commit("search/updateIsLoading", false); //取消加载中
+
     return respose.data; //返回响应主体内容, 可配可不配
 },error=>{
+    store.commit("search/updateIsLoading", false); //取消加载中
     let {response} = error;
     if(response){  //服务器返回结果,按照状态码处理
         switch(response.status) {

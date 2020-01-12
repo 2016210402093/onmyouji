@@ -1,10 +1,11 @@
 <template>
   <div>
-    <onmyoujiHead ref="headComponent" @isChange="getIsQuery"></onmyoujiHead>
+    <loading v-if="isLoading"></loading>
+    <onmyoujiHead ref="headComponent"></onmyoujiHead>
 
     <!-- 会频繁发生切换,使用v-show -->
     <onmyoujiPicChange v-show="!isQuery"></onmyoujiPicChange>
-    <onmyoujiSearchResult v-show="isQuery" v-bind:inputData="inputData" ></onmyoujiSearchResult>
+    <onmyoujiSearchResult v-show="isQuery"></onmyoujiSearchResult>
   </div>
 </template>
 
@@ -12,79 +13,30 @@
 import onmyoujiHead from '../components/onmyoujiHead.vue'
 import onmyoujiPicChange from '../components/onmyoujiPicChange'
 import onmyoujiSearchResult from '../components/onmyoujiSearchResult'
+import loading from '../components/loading'
+import {mapState} from "vuex"
 
 export default {
   name: 'app',
   components: {
     onmyoujiHead,
     onmyoujiPicChange,
-    onmyoujiSearchResult
+    onmyoujiSearchResult,
+    loading
   },
-  data() {
-    return {
-      isQuery: false,     //判断是否有内容输入
-      inputData: {},      //输入的信息
-    }
+  computed: {
+    ...mapState('search',{
+      isQuery: state => state.isQuery,
+      isLoading: state => state.isLoading
+      })
   },
-  methods: {
-    getIsQuery(data){
-      this.isQuery = data.inputFengMo.length>0||data.inputXuanShang.length>0;
-      this.inputData = data;
-      
-      switch (this.inputData.isFengMo) {
-        case true:
-          this.$api.queryFengMo.queryFengMoByKeyWords({
-            keyword: this.inputData.inputFengMo
-            })
-          .then((res)=>{
-            if(res.data.length === 0){
-              this.inputData = Object.assign({}, this.inputData, {queryResult: [{
-                id:1000,
-                question:`没有找到显关线索!点击上面的'溯~'联系我吧`,
-                answer: '╥﹏╥...'
-                }]
-              })
-            }
-            else{
-              this.inputData = Object.assign({}, this.inputData, {queryResult: res.data})
-            }         
-          })
-          .catch((err)=>{
-            alert(err);
-          })
-          break;
-        
-        case false:
-          this.$api.queryXuanShang.queryXuanShangByKeyWords({
-              keyword: this.inputData.inputXuanShang
-            })
-          .then((res)=>{
-            if(res.data.length === 0){
-              this.inputData = Object.assign({}, this.inputData, {queryResult: [{
-                id:166666,
-                clue:'╥﹏╥...',
-                god: '╥﹏╥...',
-                recommend: `没有找到显关线索!点击上面的'溯~'联系我吧`
-                }]
-              })
-            }
-            else{
-              this.inputData = Object.assign({}, this.inputData, {queryResult: res.data})
-            }   
-          })
-          .catch((err)=>{
-            alert(err);
-          })
-          break;
-      }
 
-    }
-  },
-  mounted(){
-    
-  }
 }
 </script>
 
 <style>
+*{
+  margin: 0;
+  padding: 0;
+}
 </style>
