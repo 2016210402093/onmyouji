@@ -8,26 +8,27 @@ import store from '../store'
 
 提前在package.json文件的serve中布置好 （mac 去掉set和&&用空格代替）
 "serve": "vue-cli-service serve",
-"test": "set NODE_ENV=test && vue-cli-service serve",
-"production": "set NODE_ENV=production && vue-cli-service serve",
+"test": "set NODE_ENV=test&&vue-cli-service serve",                   &&左边别留空格...
+"production": "set NODE_ENV=production&&vue-cli-service serve",
 开发环境: npm run serve
 测试环境：npm run test
 生产环境：npm run production
 */
+
 switch(process.env.NODE_ENV) {
     //生产环境（部署到服务器上的环境）
-    case "production":
-        axios.defaults.baseURL = "http://47.102.199.210/:8090/";
+    case 'production' :
+        axios.defaults.baseURL = "http://47.102.199.210:8090";
         break;
     
     //测试环境
-    case "test" :
-        axios.defaults.baseURL = "http://localhost:8090/";
+    case 'test' :
+        axios.defaults.baseURL = "http://47.102.199.210:8090";
         break;
     
     //默认开发环境
     default:
-        axios.defaults.baseURL = "http://localhost:8090/";
+        axios.defaults.baseURL = "http://localhost:8090";
 }
 
 
