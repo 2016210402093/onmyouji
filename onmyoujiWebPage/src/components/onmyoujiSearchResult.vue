@@ -30,6 +30,7 @@ import {mapState} from "vuex"
 
 export default {
     name: 'searchResult',
+    timer: null,
     
     computed: {
       ...mapState('search',{
@@ -48,7 +49,10 @@ export default {
     watch: {
       inputFengMo(){
         if(this.inputFengMo!==''){
-          this.$api.queryFengMo.queryFengMoByKeyWords({
+          //函数防抖
+          this.timer = null;
+          this.timer = setTimeout(()=>{
+            this.$api.queryFengMo.queryFengMoByKeyWords({
             keyword: this.inputFengMo
             })
           .then((res)=>{
@@ -66,11 +70,15 @@ export default {
           .catch((err)=>{
             alert(err);
           })
+          }, 500)
         }
       },
       inputXuanShang(){
         if(this.inputXuanShang !== ''){
-          this.$api.queryXuanShang.queryXuanShangByKeyWords({
+
+          this.timer = null;
+          this.timer = setTimeout(()=>{
+            this.$api.queryXuanShang.queryXuanShangByKeyWords({
               keyword: this.inputXuanShang
             })
           .then((res)=>{
@@ -89,6 +97,7 @@ export default {
           .catch((err)=>{
             alert(err);
           })
+          }, 500);
         }
       }
     }
@@ -100,7 +109,7 @@ export default {
 <style scoped>
 
 #searchResult {
-    margin-top: 40px;
+    margin-top: 20px;
     padding: 8px;
 }
 

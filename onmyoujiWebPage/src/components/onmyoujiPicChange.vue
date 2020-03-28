@@ -123,9 +123,9 @@ export default {
 
 
 .boxImg0 {
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
     z-index: 1;
     left: 0;
     top: 0;
@@ -137,9 +137,9 @@ export default {
 }
 
 .boxImg1 {
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
     z-index: 2;
     left: 0;
     top: 0;

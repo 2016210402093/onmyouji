@@ -96,8 +96,10 @@ export default {
 }
 
 .header img {
-    width: 46%;
-    margin: calc(2% - 2px);
+    width: 42%;
+    margin-left: calc(4% - 2px);
+    margin-right: calc(4% - 2px);
+    margin-top: 2%;
     border-radius: 15px;
     flex: 0 1 auto;
 }
